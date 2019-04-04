@@ -36,6 +36,7 @@ public class Preprocessor {
 	/**
 	 * 分割种子库，将种子对提取出来
 	 * */
+	@SuppressWarnings("resource")
 	public List<Seed> spiltedSeeds(String pathname) {
 
 		String seedf = "";
@@ -51,6 +52,7 @@ public class Preprocessor {
 			if (file.isFile() && file.exists()) {
 				InputStream inputStream = new FileInputStream(file);
 				InputStreamReader reader = new InputStreamReader(inputStream,"gbk");
+				//InputStreamReader reader = new InputStreamReader(inputStream,"utf-8");
 				BufferedReader bufferedReader = new BufferedReader(reader);
 
 				String line = ""; // 用来存储按行读取的文本内容
@@ -65,7 +67,7 @@ public class Preprocessor {
 					seed = new Seed(symbol,seedf,seedl); 
 					seeds.add(seed);
 
-					System.out.println(seed);
+					//System.out.println(seed);
 				}
 				// System.out.println("ok");
 
@@ -86,6 +88,7 @@ public class Preprocessor {
 	/**
 	 * 将句子分割抽取出来的结果存入List中
 	 * */
+	@SuppressWarnings("resource")
 	public List<Occurrence> spiltedSentences(String pathname, List<Seed> seeds) {
 		// String pathname="D:/PPPPPPPractice/ckxx_jieba_seg.txt";
 		File file = new File(pathname);
@@ -96,7 +99,8 @@ public class Preprocessor {
 
 		try {
 			fis = new BufferedInputStream(new FileInputStream(file));
-			BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "gbk"), 5 * 1024 * 1024);
+			//BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "gbk"), 5 * 1024 * 1024);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "utf-8"), 5 * 1024 * 1024);
 
 			String line = "";
 			String[] spilted;
@@ -225,7 +229,7 @@ public class Preprocessor {
 			e.printStackTrace();
 		}
 
-		System.out.println();
+		//System.out.println();
 
 		return listOccurrence;
 	}
@@ -239,11 +243,8 @@ public class Preprocessor {
 		List<Structure> AAA = new ArrayList<>();
 		Structure aaa = new Structure();
 		
-		
 		List<Pattern> ssstrs = new ArrayList<>();
 		Pattern ssstr = new Pattern();
-		
-		
 
 		String inPrefix="";
 		String inMiddle="";
@@ -254,14 +255,13 @@ public class Preprocessor {
 		
 		structures.add(structure);
 		ssstrs.add(ssstr);
-		
-		
-		int flag = 1;
-		int flag1 = 1;
+
+		//int flag = 1;
+		//int flag1 = 1;
 		
 		boolean rrr = false;
 		
-		boolean trait = false;
+		//boolean trait = false;
 		boolean trait1 = false;
 		
 		for(Occurrence str: occurrence){
@@ -272,7 +272,7 @@ public class Preprocessor {
 			Iterator<String> it1 = str.getPrefix().iterator();
 			while(it1.hasNext()){
 				String ss = (String) it1.next();
-				if(ss.equals("，")||ss.equals("。")||ss.equals("")||ss.equals("、")||ss.equals("【")||ss.equals("】")||ss.equals("‘")||ss.equals("’")){
+				if(ss.equals("，")||ss.equals("。")||ss.equals("")||ss.equals("、")||ss.equals("【")||ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("‘")||ss.equals("’")){
 					it1.remove();
 				}
 			}
@@ -280,7 +280,7 @@ public class Preprocessor {
 			Iterator<String> it2 = str.getMiddle().iterator();
 			while(it2.hasNext()){
 				String ss = (String) it2.next();
-				if(ss.equals("，")||ss.equals("。")||ss.equals("")||ss.equals("、")||ss.equals("【")||ss.equals("】")||ss.equals("‘")||ss.equals("’")){
+				if(ss.equals("，")||ss.equals("。")||ss.equals("")||ss.equals("、")||ss.equals("【")||ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("‘")||ss.equals("’")){
 					it2.remove();
 				}
 			}
@@ -288,7 +288,7 @@ public class Preprocessor {
 			Iterator<String> it3 = str.getSuffix().iterator();
 			while(it3.hasNext()){
 				String ss = (String) it3.next();
-				if(ss.equals("，")||ss.equals("。")||ss.equals("")||ss.equals("、")||ss.equals("【")||ss.equals("】")||ss.equals("‘")||ss.equals("’")){
+				if(ss.equals("，")||ss.equals("。")||ss.equals("")||ss.equals("、")||ss.equals("【")||ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("‘")||ss.equals("’")){
 					it3.remove();
 				}
 			}
@@ -300,19 +300,19 @@ public class Preprocessor {
 			
 			
 			
-			ListIterator<Structure> listIt = structures.listIterator();
-			ListIterator<Pattern> listIt2 = ssstrs.listIterator();
+			//ListIterator<Structure> listIt = structures.listIterator();
+			//ListIterator<Pattern> listIt2 = ssstrs.listIterator();
 			
-
+			
 			for(int i=0;i<str.getPrefix().size();i++){
 				for(int j=0;j<str.getMiddle().size();j++){
 					for(int k=0;k<str.getSuffix().size();k++){
-						System.out.println("+++++++++++++++++++++++++++++");
-						System.out.print("i="+i+" j="+j+" k="+k+" ");
+						//System.out.println("+++++++++++++++++++++++++++++");
+						//System.out.print("i="+i+" j="+j+" k="+k+" ");
 						
 						
 						//System.out.println();
-						System.out.println("("+str.getPrefix().get(i)+","+str.getMiddle().get(j)+","+str.getSuffix().get(k)+")");							
+						//System.out.println("("+str.getPrefix().get(i)+","+str.getMiddle().get(j)+","+str.getSuffix().get(k)+")");							
 						
 						inPrefix = str.getPrefix().get(i);
 						inMiddle = str.getMiddle().get(j);
@@ -326,56 +326,7 @@ public class Preprocessor {
 						//for(Structure temp :structures){
 					
 				//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-//						int index = -1;
-//						System.out.println("listIt.hasNext()="+listIt.hasNext());
-//						if(i<str.getPrefix().size()&&j<str.getMiddle().size()&&k<str.getSuffix().size()){
-//							System.out.println();
-//						}
-//						while(listIt.hasNext()){
-//							Structure stru = (Structure) listIt.next();
-//							System.out.println("======go in  Structure=====");
-//							
-//							if(inPrefix.equals(stru.getInprefix())&&inMiddle.equals(stru.getInmiddle())&&inSuffix.equals(stru.getInsuffix())){	
-//								System.out.println("begin1111111111111111");		
-//								trait = true;
-//								stru.setInnum(flag++);
-//								stru.setInorder(trait);
-//								System.out.println("end1111111111111111");
-//	
-//							}
-//							else{
-//								System.out.println("begin2222222222222222");
-//								structure = new Structure(str.getSeedf(),str.getSeedl(),str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
-//								index = listIt.nextIndex();
-//								listIt.add(structure);
-//								//listIt.set(structure);
-//							   
-//							    //ele = listIt.next();
-//							    System.out.println("index="+index);
-//								System.out.println("stru="+stru);
-//								System.out.println("structure="+structure+"?????");
-//								
-//								index = listIt.nextIndex();
-//							    System.out.println("index="+index);
-//							    
-//							    
-//								for(Structure temp1 :structures){
-//									System.out.print(temp1);
-//									System.out.println("|");
-//								}
-//								
-//								System.out.println("end2222222222222222");
-//								
-//								
-//								
-//							}
-//							
-//							System.out.println("======go out Structure======\n");
-//						}
-//						//listIt = structures.listIterator();	
-//	
-						
-						System.out.println("'''"+structures.size());
+						/*System.out.println("'''"+structures.size());
 						for(int h =0;h<structures.size();h++){
 							System.out.println("======go in  Structure=====");
 							if(inPrefix.equals(structures.get(h).getInprefix())&&inMiddle.equals(structures.get(h).getInmiddle())&&inSuffix.equals(structures.get(h).getInsuffix())){	
@@ -384,6 +335,7 @@ public class Preprocessor {
 								structures.get(h).setInnum(++flag);
 								structures.get(h).setInorder(trait);
 								System.out.println("end1111111111111111");
+								trait = false;
 								break;
 	
 							}
@@ -416,70 +368,70 @@ public class Preprocessor {
 								
 							}
 							System.out.println("======go out Structure=====");
-						}
+						}*/
 						
-							
+					
 						//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-//						while(listIt2.hasNext()){
-//							Pattern ssstru = (Pattern)listIt2.next();
-//							System.out.println("======go in  Pattern======");
-//							//System.out.println("??"+temp+"??");
-//							//System.out.print("+");
-//					
-//
-//							//if(temp.getInprefix().equals(inPrefix)&&temp.getInmiddle().equals(inMiddle)&&temp.getInsuffix().equals(inSuffix)){
-//							//if(inPrefix.equals(temp.getInprefix())&&inMiddle.equals(temp.getInmiddle())&&inSuffix.equals(temp.getInsuffix())){
-//							//if(inPrefix.equals(structures.get(h).getInprefix())&&inMiddle.equals(structures.get(h).getInmiddle())&&inSuffix.equals(structures.get(h).getInsuffix())){
-//							//if(inPrefix.equals(stru.getInprefix())&&inMiddle.equals(stru.getInmiddle())&&inSuffix.equals(stru.getInsuffix())){
-//							if(inPrefix.equals(ssstru.getPrefix())&&inMiddle.equals(ssstru.getMiddle())&&inSuffix.equals(ssstru.getSuffix())){
-//									
-//								System.out.println("begin1111111111111111");		
-//								trait1 = true;
-//								//structures.get(h).setInnum(flag++);
-//								//stru.setInnum(flag++);
-//								ssstru.setNum(flag1++);
-//								//temp.setInnum(flag++);
-//								//structures.get(h).setInorder(trait);
-//								//stru.setInorder(trait);
-//								ssstru.setOrder(trait1);
-//								//temp.setInorder(trait);
-//								System.out.println("end1111111111111111");
-//
-//							}
-//							else{
-//								System.out.println("begin2222222222222222");
-//								
-//								//structure = new Structure(str.getSeedf(),str.getSeedl(),str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
-//								ssstr = new Pattern(str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
-//								
-//								//structures.add(structure);
-//								//listIt.add(structure);
-//								listIt2.add(ssstr);
-//
-//								//for(Structure temp1 :structures){
-//								//	System.out.print(temp1);
-//								//	System.out.println("|");
-//								//}
-//								for(Pattern temp1 :ssstrs){
-//									System.out.print(temp1);
-//									System.out.println("|");
-//								}
-//								System.out.println("end2222222222222222");
-//
-//							}
-//							System.out.println("======go out Pattern======\n");
-//						}
+						/*while(listIt2.hasNext()){
+							Pattern ssstru = (Pattern)listIt2.next();
+							System.out.println("======go in  Pattern======");
+							//System.out.println("??"+temp+"??");
+							//System.out.print("+");
+					
 
-						
-						System.out.println("'''"+ssstrs.size());
-						for(int h =0;h<ssstrs.size();h++){
-							System.out.println("======go in  Pattern=====");
-							if(inPrefix.equals(ssstrs.get(h).getPrefix())&&inMiddle.equals(ssstrs.get(h).getMiddle())&&inSuffix.equals(ssstrs.get(h).getSuffix())){	
+							//if(temp.getInprefix().equals(inPrefix)&&temp.getInmiddle().equals(inMiddle)&&temp.getInsuffix().equals(inSuffix)){
+							//if(inPrefix.equals(temp.getInprefix())&&inMiddle.equals(temp.getInmiddle())&&inSuffix.equals(temp.getInsuffix())){
+							//if(inPrefix.equals(structures.get(h).getInprefix())&&inMiddle.equals(structures.get(h).getInmiddle())&&inSuffix.equals(structures.get(h).getInsuffix())){
+							//if(inPrefix.equals(stru.getInprefix())&&inMiddle.equals(stru.getInmiddle())&&inSuffix.equals(stru.getInsuffix())){
+							if(inPrefix.equals(ssstru.getPrefix())&&inMiddle.equals(ssstru.getMiddle())&&inSuffix.equals(ssstru.getSuffix())){
+									
 								System.out.println("begin1111111111111111");		
 								trait1 = true;
-								ssstrs.get(h).setNum(++flag1);
-								ssstrs.get(h).setOrder(trait1);
+								//structures.get(h).setInnum(flag++);
+								//stru.setInnum(flag++);
+								ssstru.setNum(flag1++);
+								//temp.setInnum(flag++);
+								//structures.get(h).setInorder(trait);
+								//stru.setInorder(trait);
+								ssstru.setOrder(trait1);
+								//temp.setInorder(trait);
 								System.out.println("end1111111111111111");
+
+							}
+							else{
+								System.out.println("begin2222222222222222");
+								
+								//structure = new Structure(str.getSeedf(),str.getSeedl(),str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
+								ssstr = new Pattern(str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
+								
+								//structures.add(structure);
+								//listIt.add(structure);
+								listIt2.add(ssstr);
+
+								//for(Structure temp1 :structures){
+								//	System.out.print(temp1);
+								//	System.out.println("|");
+								//}
+								for(Pattern temp1 :ssstrs){
+									System.out.print(temp1);
+									System.out.println("|");
+								}
+								System.out.println("end2222222222222222");
+
+							}
+							System.out.println("======go out Pattern======\n");
+						}*/
+						
+						//System.out.println("'''"+ssstrs.size());
+						for(int h =0;h<ssstrs.size();h++){
+							//System.out.println("======go in  Pattern=====");
+							if(inPrefix.equals(ssstrs.get(h).getPrefix())&&inMiddle.equals(ssstrs.get(h).getMiddle())&&inSuffix.equals(ssstrs.get(h).getSuffix())){	
+								//System.out.println("begin1111111111111111");		
+								trait1 = true;
+								ssstrs.get(h).setNum(ssstrs.get(h).getNum()+1);
+								ssstrs.get(h).setOrder(trait1);
+								//System.out.println("end1111111111111111");
+								trait1 = false;
 								break;
 	
 							}
@@ -489,17 +441,17 @@ public class Preprocessor {
 								}
 								
 								if(rrr){
-									System.out.println("begin2222222222222222");
+									//System.out.println("begin2222222222222222");
 									//if()
 									ssstr = new Pattern(str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
 									ssstrs.add(ssstr);
 									
-									for(Pattern temp1 :ssstrs){
-										System.out.print(temp1);
-										System.out.println("|");
-									}
+									//for(Pattern temp1 :ssstrs){
+									//	System.out.print(temp1);
+									//	System.out.println("|");
+									//}
 									
-									System.out.println("end2222222222222222");
+									//System.out.println("end2222222222222222");
 									//continue;
 									rrr=false;
 									break;
@@ -507,34 +459,41 @@ public class Preprocessor {
 								
 								
 							}
-							System.out.println("======go out Pattern=====");
+							//System.out.println("======go out Pattern=====");
+							
 						}
-	
-						
-						
 				//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-			
+							
 					}
+					
+					
 				}
+				
+			}
+			
+		}
+		//System.out.println("kakakakakakakakakakakakakakakakakakaka");
+		//System.out.println();
+		//System.out.println("============charpter1=================");
+		//for(Structure str:AAA){
+		//	System.out.println(str);
+		//}
+		//System.out.println("************charpter2*****************");
+		//for(Structure str:structures){
+		//		System.out.println(str);
+		//}
+		//System.out.println();
+		//System.out.println("=============charpter3=================");
+		//for(Pattern str:ssstrs){
+		//	System.out.println(str);
+		//}
+		System.out.println("=============charpter4=================");
+		for(Pattern str:ssstrs){
+			if(str.getOrder()){
+			System.out.println(str);
 			}
 		}
-		System.out.println("kakakakakakakakakakakakakakakakakakaka");
-		System.out.println();
-		System.out.println("============charpter1=================");
-		for(Structure str:AAA){
-			System.out.println(str);
-		}
-		System.out.println();
-		System.out.println("************charpter2*****************");
-		for(Structure str:structures){
-				System.out.println(str);
-		}
-		System.out.println();
-		System.out.println("************charpter3*****************");
-		for(Pattern str:ssstrs){
-			System.out.println(str);
-	}
-		System.out.println("===============end===================");
+		
 	}
 
 
