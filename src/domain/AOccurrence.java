@@ -1,18 +1,20 @@
 package domain;
 
-public class Occurrence {
+import java.util.List;
+
+public class AOccurrence {
 	
-		String prefix;  //seedf之前出现的语料(最接近的一个词)
-		String seedf;	//seedf   
-		String middle;	//seedf和seedl之间出现的语料(中间所有的词)
+		List<String> prefix;  //seedf之前出现的语料
+		String seedf;	//seedf
+		List<String> middle;	//seedf和seedl之间出现的语料
 		String seedl;	//seedl
-		String suffix;	//seedl之后出现的语料(最接近的一个词)
+		List<String> suffix;	//seedl之后出现的语料
 		boolean order;	//是否在这个句子中找到种子
 		int num;		//标记这个句子中有几个种子
-		String symbol;  //标记这个种子属于什么类型
+		String symbol;
 		
-		public Occurrence(){}
-		public Occurrence(String prefix,String seedf,String middle,String seedl,String suffix,String symbol,boolean order,int num){
+		public AOccurrence(){}
+		public AOccurrence(List<String> prefix,String seedf,List<String> middle,String seedl,List<String> suffix,String symbol,boolean order,int num){
 			this.prefix = prefix;
 			this.seedf = seedf;
 			this.middle = middle;
@@ -22,11 +24,16 @@ public class Occurrence {
 			this.order = order;
 			this.num = num;
 		}
-		
-		public String getPrefix() {
+		public String getSymbol() {
+			return symbol;
+		}
+		public void setSymbol(String symbol) {
+			this.symbol = symbol;
+		}
+		public List<String> getPrefix() {
 			return prefix;
 		}
-		public void setPrefix(String prefix) {
+		public void setPrefix(List<String> prefix) {
 			this.prefix = prefix;
 		}
 		public String getSeedf() {
@@ -35,10 +42,10 @@ public class Occurrence {
 		public void setSeedf(String seedf) {
 			this.seedf = seedf;
 		}
-		public String getMiddle() {
+		public List<String> getMiddle() {
 			return middle;
 		}
-		public void setMiddle(String middle) {
+		public void setMiddle(List<String> middle) {
 			this.middle = middle;
 		}
 		public String getSeedl() {
@@ -47,10 +54,10 @@ public class Occurrence {
 		public void setSeedl(String seedl) {
 			this.seedl = seedl;
 		}
-		public String getSuffix() {
+		public List<String> getSuffix() {
 			return suffix;
 		}
-		public void setSuffix(String suffix) {
+		public void setSuffix(List<String> suffix) {
 			this.suffix = suffix;
 		}
 		public boolean isOrder() {
@@ -65,15 +72,9 @@ public class Occurrence {
 		public void setNum(int num) {
 			this.num = num;
 		}
-		public String getSymbol() {
-			return symbol;
-		}
-		public void setSymbol(String symbol) {
-			this.symbol = symbol;
-		}
 		
 		public String toString(){
-			return "(["+prefix+"],["+seedf+"],["+middle+"],["+seedl+"],["+suffix+"],["+symbol+"],"+order+","+num+")";
+			return "("+prefix+","+seedf+","+middle+","+seedl+","+suffix+","+symbol+","+order+","+num+")";
 		}
 		
 }

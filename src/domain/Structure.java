@@ -2,9 +2,9 @@ package domain;
 
 public class Structure {
 	
-	String seedf;
+	String seedf;	
 	String seedl;
-	String symbol;
+	String symbol;	  //种子的类型
 	String inprefix;  //seedf之前出现的语料
 	String inmiddle;	//seedf和seedl之间出现的语料
 	String insuffix;	//seedl之后出现的语料

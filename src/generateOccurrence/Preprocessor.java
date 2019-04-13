@@ -2,7 +2,6 @@ package generateOccurrence;
 
 import java.io.*;
 import java.util.*;
-
 import domain.Occurrence;
 import domain.Pattern;
 import domain.Seed;
@@ -90,7 +89,8 @@ public class Preprocessor {
 	 * */
 	@SuppressWarnings("resource")
 	public List<Occurrence> spiltedSentences(String pathname, List<Seed> seeds) {
-		// String pathname="D:/PPPPPPPractice/ckxx_jieba_seg.txt";
+		//System.out.println("=========go in  spiltedSentences========");
+		//String pathname="D:/PPPPPPPractice/ckxx_jieba_seg.txt";
 		File file = new File(pathname);
 		BufferedInputStream fis;
 
@@ -110,16 +110,18 @@ public class Preprocessor {
 			while ((line = reader.readLine()) != null) {
 				// TODO：write your business
 				spilted = lineSpilt(line);
-				//System.out.println(line);
+				//System.out.println("按行读取的句子："+line);
 				for (int i = 0; i < spilted.length; i++) {
 					List<String> sentences = new ArrayList<>();
 
 					// System.out.print(spilted[i]+" ");
 					if (spilted[i].equals("。")) {
+						//System.out.print("[");
 						for (int j = tag; j <= i; j++) {
 							sentences.add(spilted[j]);
-							// System.out.print(""+spilted[j]+"/");
+							//System.out.print(""+spilted[j]+",");
 						}
+						//System.out.println("]");
 						// System.out.println();
 						tag = i + 1;
 						int pos = -1;
@@ -132,19 +134,22 @@ public class Preprocessor {
 
 						for (pos = 0; pos < sentences.size(); pos++) {
 
-							List<String> prefix = new ArrayList<>();
+							String prefix = "";
 							String seedf = "";
-							List<String> middle = new ArrayList<>();
+							String middle = "";
 							String seedl = "";
-							List<String> suffix = new ArrayList<>();
-							String symbol ="";
+							String suffix = "";
+							String symbol = "";
 
 							int num = -1;
 
 							for (int flag = 0; flag < seeds.size(); flag++) {
-								// System.out.print(sentences.get(pos).equals(strSeed.getSeedfirst())+"|");
+								//System.out.println("flag="+flag);
+								//System.out.println(sentences.get(pos));
+								//System.out.println(seeds.get(flag).getSeedfirst());
+								//System.out.print(sentences.get(pos).equals(seeds.get(flag).getSeedfirst())+"|");
 								if (sentences.get(pos).equals(seeds.get(flag).getSeedfirst()) == true) {
-									// System.out.print("first\\\\\\\\\\\\\\\\\\\\|"+"posa="+pos+"||");
+									//System.out.print("first\\\\\\\\\\\\\\\\\\\\|"+"posa="+pos+"||");
 									posa = pos;
 									ordera = true;
 
@@ -163,41 +168,88 @@ public class Preprocessor {
 										orderb = true;
 									}
 
+									
 									if (ordera && orderb) {
+										//System.out.println();
+										//System.out.println(sentences);
 										order = true;
-										for (int a = 0; a < posa; a++) {
-											prefix.add(sentences.get(a));
+										//System.out.println("true|");
+										if(posa!=0){
+											int a=posa;
+											String ss=sentences.get(posa-1);
+											//System.out.println(ss+"");
+											while(ss.equals(" ")||ss.equals("，")||ss.equals("。")||
+													ss.equals("！")||ss.equals("、")||ss.equals("【")||
+													ss.equals("】")||ss.equals("《")||ss.equals("》")||
+													ss.equals("‘")||ss.equals("’")||ss.equals("“")||
+													ss.equals("”")||ss.equals("\"")||ss.equals("（")||
+													ss.equals("）")||ss.equals("：")){
+												a--;
+												//System.out.println(ss+"	"+a);
+												//System.out.println();
+												if(a>0){
+													ss=sentences.get(a-1);
+												}
+												else{
+													break;
+												}
+											}
+											//System.out.println();
+											//System.out.println(ss+"	"+a);
+											if(a>0){
+												prefix = sentences.get(a-1);
+											}
+											else{
+												prefix = "";
+											}
 										}
-										// System.out.println();
-										// for(String str:prefix){
-										// System.out.print("**"+str+"**");
-										// }
-										// System.out.println();
-
+										else{
+											prefix = "";
+										}
 										seedf = sentences.get(posa);
-
 										for (int a = posa + 1; a < posb; a++) {
-											middle.add(sentences.get(a));
+											//middle.add(sentences.get(a));
+											middle +=sentences.get(a);
+											//System.out.println(sentences.get(a));
 										}
-										// System.out.println();
-										// for(String str:middle){
-										// System.out.print("**"+str+"**");
-										// }
-										// System.out.println();
-
+										//System.out.println(middle);
 										seedl = sentences.get(posb);
-										for (int a = posb + 1; a < sentences
-												.size(); a++) {
-											suffix.add(sentences.get(a));
+										if(posb!=sentences.size()-1){
+											int b=posb;
+											String ss=sentences.get(posb+1);
+											//System.out.println(ss);
+											while(ss.equals(" ")||ss.equals("，")||ss.equals("。")||
+													ss.equals("！")||ss.equals("、")||ss.equals("【")||
+													ss.equals("】")||ss.equals("《")||ss.equals("》")||
+													ss.equals("‘")||ss.equals("’")||ss.equals("“")||
+													ss.equals("”")||ss.equals("\"")||ss.equals("（")||
+													ss.equals("）")||ss.equals("：")){
+												b++;
+												if(b<sentences.size()-1){
+													ss=sentences.get(b+1);
+												}
+												else{
+													break;
+												}
+												
+											}
+											if(b<sentences.size()-1){
+												suffix = sentences.get(b+1);
+											}
+											else{
+												suffix="";
+											}
+//											suffix = sentences.get(posb+1);
 										}
-										// System.out.println();
-										// for(String str:suffix){
-										// System.out.print("**"+str+"**");
-										// }
-										// System.out.println();
+										else{
+											suffix = "";
+										}
 										symbol = seeds.get(flag).getSymbol();
+										
 										occurrence = new Occurrence(prefix,seedf, middle, seedl, suffix,symbol,order, num);
 										listOccurrence.add(occurrence);
+										
+										//System.out.println("occurrence.toString()=");
 										//System.out.println(occurrence.toString());
 										//System.out.println();
 
@@ -205,7 +257,7 @@ public class Preprocessor {
 
 									} else {
 										order = false;
-										// System.out.print("failure|");
+										//System.out.print("failure|");
 									}
 									ordera = false;
 									orderb = false;
@@ -216,11 +268,11 @@ public class Preprocessor {
 
 					}
 				}
-				// System.out.println("=============");
-				// System.out.println("一行句子读完啦");
-				// System.out.println("=============");
-				//
+				//System.out.println();
+				//System.out.println("一行句子读完啦");
 				tag = 0;
+				
+				//System.out.println("=========go out spiltedSentences========");
 
 
 			}
@@ -228,8 +280,11 @@ public class Preprocessor {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
 		}
-
-		//System.out.println();
+		System.out.println("\n************listOccurence***************");
+		for(Occurrence str:listOccurrence){
+			System.out.println(str);
+		}
+		System.out.println("************listOccurence***************\n");
 
 		return listOccurrence;
 	}
@@ -237,267 +292,93 @@ public class Preprocessor {
 
 
 	public  void findOccurrence(List<Occurrence> occurrence,List<Seed> seed) {
-		List<Structure> structures = new ArrayList<>();
-		Structure structure = new Structure();
-		
-		List<Structure> AAA = new ArrayList<>();
-		Structure aaa = new Structure();
-		
 		List<Pattern> ssstrs = new ArrayList<>();
 		Pattern ssstr = new Pattern();
 
-		String inPrefix="";
-		String inMiddle="";
-		String inSuffix="";
-		boolean inOrder=false;
+		String symbol = "";
+		String inPrefix = "";
+		String inMiddle = "";
+		String inSuffix = "";
+		boolean inOrder = false;
 		int inNum = 1;
 
-		
-		structures.add(structure);
 		ssstrs.add(ssstr);
-
-		//int flag = 1;
-		//int flag1 = 1;
 		
-		boolean rrr = false;
-		
-		//boolean trait = false;
 		boolean trait1 = false;
+		boolean rrr = false;
 		
 		for(Occurrence str: occurrence){
 			
-			System.out.println("------------------------------------------------------");
-			System.out.println(str);
-			System.out.println("种子：("+str.getSeedf()+","+str.getSeedl()+","+str.getSymbol()+")");
-			Iterator<String> it1 = str.getPrefix().iterator();
-			while(it1.hasNext()){
-				String ss = (String) it1.next();
-				if(ss.equals("，")||ss.equals("。")||ss.equals("")||ss.equals("、")||ss.equals("【")||ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("‘")||ss.equals("’")){
-					it1.remove();
+//			System.out.println("------------------------------------------------------");
+//			System.out.println(str);
+//			System.out.println("种子：("+str.getSeedf()+","+str.getSeedl()+","+str.getSymbol()+")");
+//			System.out.println("前缀："+str.getPrefix());
+//			System.out.println("中缀："+str.getMiddle());
+//			System.out.println("后缀："+str.getSuffix());
+//			System.out.println("ok");
+//			System.out.println("------------------------------------------------------s\n");
+			
+			symbol = str.getSymbol();
+			inPrefix = str.getPrefix();
+			inMiddle = str.getMiddle();
+			inSuffix = str.getSuffix();
+			
+			
+			
+			//System.out.println("'''"+ssstrs.size());
+			for(int h =0;h<ssstrs.size();h++){
+				//System.out.println("======go in  Pattern=====");
+				if(inPrefix.equals(ssstrs.get(h).getPrefix())&&inMiddle.equals(ssstrs.get(h).getMiddle())&&inSuffix.equals(ssstrs.get(h).getSuffix())){	
+					//System.out.println("begin1111111111111111");		
+					trait1 = true;
+					ssstrs.get(h).setNum(ssstrs.get(h).getNum()+1);
+					ssstrs.get(h).setOrder(trait1);
+					//System.out.println("end1111111111111111");
+					trait1 = false;
+					break;
 				}
-			}
-			System.out.println("前缀："+str.getPrefix());
-			Iterator<String> it2 = str.getMiddle().iterator();
-			while(it2.hasNext()){
-				String ss = (String) it2.next();
-				if(ss.equals("，")||ss.equals("。")||ss.equals("")||ss.equals("、")||ss.equals("【")||ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("‘")||ss.equals("’")){
-					it2.remove();
-				}
-			}
-			System.out.println("中缀："+str.getMiddle());
-			Iterator<String> it3 = str.getSuffix().iterator();
-			while(it3.hasNext()){
-				String ss = (String) it3.next();
-				if(ss.equals("，")||ss.equals("。")||ss.equals("")||ss.equals("、")||ss.equals("【")||ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("‘")||ss.equals("’")){
-					it3.remove();
-				}
-			}
-			System.out.println("后缀："+str.getSuffix());
-			System.out.println(str);
-			System.out.println("ok");
-			System.out.println("------------------------------------------------------");
-			
-			
-			
-			
-			//ListIterator<Structure> listIt = structures.listIterator();
-			//ListIterator<Pattern> listIt2 = ssstrs.listIterator();
-			
-			
-			for(int i=0;i<str.getPrefix().size();i++){
-				for(int j=0;j<str.getMiddle().size();j++){
-					for(int k=0;k<str.getSuffix().size();k++){
-						//System.out.println("+++++++++++++++++++++++++++++");
-						//System.out.print("i="+i+" j="+j+" k="+k+" ");
-						
-						
-						//System.out.println();
-						//System.out.println("("+str.getPrefix().get(i)+","+str.getMiddle().get(j)+","+str.getSuffix().get(k)+")");							
-						
-						inPrefix = str.getPrefix().get(i);
-						inMiddle = str.getMiddle().get(j);
-						inSuffix = str.getSuffix().get(k);
-						
-						aaa = new Structure(str.getSeedf(),str.getSeedl(),str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
-						AAA.add(aaa);
-						
-						//for(int h=0;h<structures.size();h++){
-						//System.out.println("structures.size()="+structures.size());						
-						//for(Structure temp :structures){
-					
-				//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-						/*System.out.println("'''"+structures.size());
-						for(int h =0;h<structures.size();h++){
-							System.out.println("======go in  Structure=====");
-							if(inPrefix.equals(structures.get(h).getInprefix())&&inMiddle.equals(structures.get(h).getInmiddle())&&inSuffix.equals(structures.get(h).getInsuffix())){	
-								System.out.println("begin1111111111111111");		
-								trait = true;
-								structures.get(h).setInnum(++flag);
-								structures.get(h).setInorder(trait);
-								System.out.println("end1111111111111111");
-								trait = false;
-								break;
-	
-							}
-							else{
-								if(h+1==structures.size()){
-									rrr = true;
-								}
-								
-								if(rrr){
-									System.out.println("begin2222222222222222");
-									//if()
-									structure = new Structure(str.getSeedf(),str.getSeedl(),str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
-									structures.add(structure);
-									
-									
-									for(Structure temp1 :structures){
-										System.out.print(temp1);
-										System.out.println("|");
-									}
-									
-									System.out.println("end2222222222222222");
-									//continue;
-									rrr=false;
-									break;
-								}
-								
-								else{
-									
-								}
-								
-							}
-							System.out.println("======go out Structure=====");
-						}*/
-						
-					
-						//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-						/*while(listIt2.hasNext()){
-							Pattern ssstru = (Pattern)listIt2.next();
-							System.out.println("======go in  Pattern======");
-							//System.out.println("??"+temp+"??");
-							//System.out.print("+");
-					
-
-							//if(temp.getInprefix().equals(inPrefix)&&temp.getInmiddle().equals(inMiddle)&&temp.getInsuffix().equals(inSuffix)){
-							//if(inPrefix.equals(temp.getInprefix())&&inMiddle.equals(temp.getInmiddle())&&inSuffix.equals(temp.getInsuffix())){
-							//if(inPrefix.equals(structures.get(h).getInprefix())&&inMiddle.equals(structures.get(h).getInmiddle())&&inSuffix.equals(structures.get(h).getInsuffix())){
-							//if(inPrefix.equals(stru.getInprefix())&&inMiddle.equals(stru.getInmiddle())&&inSuffix.equals(stru.getInsuffix())){
-							if(inPrefix.equals(ssstru.getPrefix())&&inMiddle.equals(ssstru.getMiddle())&&inSuffix.equals(ssstru.getSuffix())){
-									
-								System.out.println("begin1111111111111111");		
-								trait1 = true;
-								//structures.get(h).setInnum(flag++);
-								//stru.setInnum(flag++);
-								ssstru.setNum(flag1++);
-								//temp.setInnum(flag++);
-								//structures.get(h).setInorder(trait);
-								//stru.setInorder(trait);
-								ssstru.setOrder(trait1);
-								//temp.setInorder(trait);
-								System.out.println("end1111111111111111");
-
-							}
-							else{
-								System.out.println("begin2222222222222222");
-								
-								//structure = new Structure(str.getSeedf(),str.getSeedl(),str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
-								ssstr = new Pattern(str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
-								
-								//structures.add(structure);
-								//listIt.add(structure);
-								listIt2.add(ssstr);
-
-								//for(Structure temp1 :structures){
-								//	System.out.print(temp1);
-								//	System.out.println("|");
-								//}
-								for(Pattern temp1 :ssstrs){
-									System.out.print(temp1);
-									System.out.println("|");
-								}
-								System.out.println("end2222222222222222");
-
-							}
-							System.out.println("======go out Pattern======\n");
-						}*/
-						
-						//System.out.println("'''"+ssstrs.size());
-						for(int h =0;h<ssstrs.size();h++){
-							//System.out.println("======go in  Pattern=====");
-							if(inPrefix.equals(ssstrs.get(h).getPrefix())&&inMiddle.equals(ssstrs.get(h).getMiddle())&&inSuffix.equals(ssstrs.get(h).getSuffix())){	
-								//System.out.println("begin1111111111111111");		
-								trait1 = true;
-								ssstrs.get(h).setNum(ssstrs.get(h).getNum()+1);
-								ssstrs.get(h).setOrder(trait1);
-								//System.out.println("end1111111111111111");
-								trait1 = false;
-								break;
-	
-							}
-							else{
-								if(h+1==ssstrs.size()){
-									rrr = true;
-								}
-								
-								if(rrr){
-									//System.out.println("begin2222222222222222");
-									//if()
-									ssstr = new Pattern(str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
-									ssstrs.add(ssstr);
-									
-									//for(Pattern temp1 :ssstrs){
-									//	System.out.print(temp1);
-									//	System.out.println("|");
-									//}
-									
-									//System.out.println("end2222222222222222");
-									//continue;
-									rrr=false;
-									break;
-								}
-								
-								
-							}
-							//System.out.println("======go out Pattern=====");
-							
-						}
-				//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-							
+				else{
+					if(h+1==ssstrs.size()){
+						rrr = true;
 					}
-					
-					
+								
+					if(rrr){
+						//System.out.println("begin2222222222222222");
+						ssstr = new Pattern(str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
+						ssstrs.add(ssstr);
+										
+						//for(Pattern temp1 :ssstrs){
+						//	System.out.print(temp1);
+						//	System.out.println("|");
+						//}
+						//System.out.println("end2222222222222222");
+						
+						rrr=false;
+						break;
+					}			
 				}
-				
+				//System.out.println("======go out Pattern=====");
+							
 			}
-			
+			//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//	
 		}
-		//System.out.println("kakakakakakakakakakakakakakakakakakaka");
-		//System.out.println();
-		//System.out.println("============charpter1=================");
-		//for(Structure str:AAA){
-		//	System.out.println(str);
-		//}
-		//System.out.println("************charpter2*****************");
-		//for(Structure str:structures){
-		//		System.out.println(str);
-		//}
-		//System.out.println();
-		//System.out.println("=============charpter3=================");
-		//for(Pattern str:ssstrs){
-		//	System.out.println(str);
-		//}
+//		System.out.println("kakakakakakakakakakakakakakakakakakaka");
+//		System.out.println();
+//		System.out.println("=============charpter3=================");
+//		for(Pattern str:ssstrs){
+//			System.out.println(str);
+//		}
 		System.out.println("=============charpter4=================");
 		for(Pattern str:ssstrs){
 			if(str.getOrder()){
 			System.out.println(str);
 			}
 		}
+		System.out.println();
 		
 	}
-
-
-
+	
+	
 	public void matchOccurrence(){
 
 	}

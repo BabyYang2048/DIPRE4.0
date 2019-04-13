@@ -56,7 +56,7 @@ public class Pattern {
 	}
 	
 	public String toString(){
-		return "("+"["+symbol+"]"+","+prefix+","+middle+","+suffix+","+order+","+num+")";
+		return "("+"["+symbol+"],["+prefix+"],["+middle+"],["+suffix+"],"+order+","+num+")";
 	}
 	
 
