@@ -2,8 +2,11 @@ package generateOccurrence;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import domain.Occurrence;
-import domain.Pattern;
+import domain.PatternA;
 import domain.Seed;
 import domain.Structure;
 
@@ -31,6 +34,22 @@ public class Preprocessor {
 		String[] splited = line.split(" |	");
 		return splited;
 	}
+	
+	/**
+	 * 
+	 * */
+	public boolean check(String string){
+		// 字符串验证规则
+		String regEx = "^[\u0391-\uFFE5]*$";
+		// 编译正则表达式
+		Pattern pattern = Pattern.compile(regEx);
+		Matcher matcher = pattern.matcher(string);
+		// 字符串是否与正则表达式相匹配
+		boolean rs = matcher.matches();
+		
+		return rs;
+	}
+	
 
 	/**
 	 * 分割种子库，将种子对提取出来
@@ -70,9 +89,12 @@ public class Preprocessor {
 				}
 				// System.out.println("ok");
 
-				// for(Seed str : seeds){
-				// System.out.println(str);
-				// }
+				System.out.println("-----------------oldseeds------------------");
+				System.out.println(seeds.size());
+				for(Seed str : seeds){
+				System.out.println(str);
+				}
+				System.out.println("-----------------oldseeds------------------");
 
 			} else {
 				System.out.println("this file is not exist");
@@ -90,7 +112,7 @@ public class Preprocessor {
 	@SuppressWarnings("resource")
 	public List<Occurrence> spiltedSentences(String pathname, List<Seed> seeds) {
 		//System.out.println("=========go in  spiltedSentences========");
-		//String pathname="D:/PPPPPPPractice/ckxx_jieba_seg.txt";
+		
 		File file = new File(pathname);
 		BufferedInputStream fis;
 
@@ -103,16 +125,16 @@ public class Preprocessor {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "utf-8"), 5 * 1024 * 1024);
 
 			String line = "";
-			String[] spilted;
-			int tag = 0; // 标记句号的位置
-
+			int tag = 0; // 标记句号的位置，以句号分隔按行读取的句子。
+			String[] spilted;//存放以句号分割的每一条句子
 
 			while ((line = reader.readLine()) != null) {
-				// TODO：write your business
+				
 				spilted = lineSpilt(line);
 				//System.out.println("按行读取的句子："+line);
+				
 				for (int i = 0; i < spilted.length; i++) {
-					List<String> sentences = new ArrayList<>();
+					List<String> sentences = new ArrayList<>();  //存放句子的list
 
 					// System.out.print(spilted[i]+" ");
 					if (spilted[i].equals("。")) {
@@ -123,15 +145,30 @@ public class Preprocessor {
 						}
 						//System.out.println("]");
 						// System.out.println();
-						tag = i + 1;
-						int pos = -1;
-						int posa = -1;
-						int posb = -1;
+						
+						tag = i + 1;  	//句号位置
+						int pos = -1;	//当前位置
+						int posa = -1;	//seedf的位置
+						int posb = -1;	//seedl的位置
 
-						boolean ordera = false;
-						boolean orderb = false;
-						boolean order = false;
+						boolean ordera = false;		//是否找到seedf
+						boolean orderb = false;		//是否找到seedl
+						boolean order = false;		//是否(seedf,seedl)两个都有
 
+						
+						/**两层循环嵌套：先遍历句子，再遍历种子
+						 * （对句子遍历种子）
+						 * for（挨个读句子里的词看是不是和seedf匹配）     
+						 * 		如果匹配{
+						 * 					标记posa，ordera
+						 * 					for（挨个读posa之后的词，看是不是和seedl匹配）
+						 * 						如果匹配{
+						 * 									标记posb，orderb
+						 * 						}
+						 * 						否则下一个句子
+						 * 				} 
+						 * 		否则下一个句子
+						 * */
 						for (pos = 0; pos < sentences.size(); pos++) {
 
 							String prefix = "";
@@ -144,22 +181,20 @@ public class Preprocessor {
 							int num = -1;
 
 							for (int flag = 0; flag < seeds.size(); flag++) {
-								//System.out.println("flag="+flag);
-								//System.out.println(sentences.get(pos));
-								//System.out.println(seeds.get(flag).getSeedfirst());
-								//System.out.print(sentences.get(pos).equals(seeds.get(flag).getSeedfirst())+"|");
+								
 								if (sentences.get(pos).equals(seeds.get(flag).getSeedfirst()) == true) {
 									//System.out.print("first\\\\\\\\\\\\\\\\\\\\|"+"posa="+pos+"||");
+									
 									posa = pos;
 									ordera = true;
 
-									String trait = seeds.get(flag).getSeedlast();
-
-									sign: 
+									String trait = seeds.get(flag).getSeedlast(); //与种子seedf相对应的seedl
+									
+									//sign: 
 										while (!sentences.get(pos).equals(trait)) {
 											pos++;
 											if (pos + 1 == sentences.size()) {
-												break sign;
+												break /*sign*/;
 											}
 										}
 
@@ -170,20 +205,20 @@ public class Preprocessor {
 
 									
 									if (ordera && orderb) {
-										//System.out.println();
-										//System.out.println(sentences);
+										
 										order = true;
 										//System.out.println("true|");
 										if(posa!=0){
 											int a=posa;
 											String ss=sentences.get(posa-1);
-											//System.out.println(ss+"");
-											while(ss.equals(" ")||ss.equals("，")||ss.equals("。")||
-													ss.equals("！")||ss.equals("、")||ss.equals("【")||
-													ss.equals("】")||ss.equals("《")||ss.equals("》")||
-													ss.equals("‘")||ss.equals("’")||ss.equals("“")||
-													ss.equals("”")||ss.equals("\"")||ss.equals("（")||
-													ss.equals("）")||ss.equals("：")){
+											//System.out.println(ss+" ");
+											while(ss.equals("")||ss.equals(" ")||ss.equals("，")||ss.equals("。")||
+													ss.equals("！")||ss.equals("、")||ss.equals("【")||ss.equals("●")||
+													ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("—")||
+													ss.equals("‘")||ss.equals("’")||ss.equals("“")||ss.equals("％")||
+													ss.equals("”")||ss.equals("\"")||ss.equals("（")||ss.equals("…")||
+													ss.equals("）")||ss.equals("？")||ss.equals("；")||ss.equals("：")||
+													ss.equals("「")||ss.equals("」")){
 												a--;
 												//System.out.println(ss+"	"+a);
 												//System.out.println();
@@ -200,17 +235,55 @@ public class Preprocessor {
 												prefix = sentences.get(a-1);
 											}
 											else{
-												prefix = "";
+												//prefix = null;
+												ordera=false;
+												orderb=false;
+												pos=posa;
+												posa=-1;
+												posb=-1;
+												break;
 											}
 										}
 										else{
-											prefix = "";
+											//prefix = null;
+											ordera=false;
+											orderb=false;
+											pos=posa;
+											posa=-1;
+											posb=-1;
+											break;
 										}
 										seedf = sentences.get(posa);
-										for (int a = posa + 1; a < posb; a++) {
-											//middle.add(sentences.get(a));
-											middle +=sentences.get(a);
-											//System.out.println(sentences.get(a));
+										if(posa+1==posb){
+											break;
+										}
+										else{
+											if(posa+2==posb){
+												String ss=sentences.get(posa+1);
+												if(ss.equals("")||ss.equals(" ")||ss.equals("，")||ss.equals("。")||
+												ss.equals("！")||ss.equals("、")||ss.equals("【")||ss.equals("●")||
+												ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("—")||
+												ss.equals("‘")||ss.equals("’")||ss.equals("“")||ss.equals("％")||
+												ss.equals("”")||ss.equals("\"")||ss.equals("（")||ss.equals("…")||
+												ss.equals("）")||ss.equals("？")||ss.equals("；")||ss.equals("：")||
+												ss.equals("「")||ss.equals("」")){
+													break;
+												}
+												else{
+													for (int a = posa + 1; a < posb; a++) {
+														//middle.add(sentences.get(a));
+														middle +=sentences.get(a);
+														//System.out.println(sentences.get(a));
+													}
+												}
+											}
+											else{
+												for (int a = posa + 1; a < posb; a++) {
+													//middle.add(sentences.get(a));
+													middle +=sentences.get(a);
+													//System.out.println(sentences.get(a));
+												}
+											}
 										}
 										//System.out.println(middle);
 										seedl = sentences.get(posb);
@@ -218,12 +291,13 @@ public class Preprocessor {
 											int b=posb;
 											String ss=sentences.get(posb+1);
 											//System.out.println(ss);
-											while(ss.equals(" ")||ss.equals("，")||ss.equals("。")||
-													ss.equals("！")||ss.equals("、")||ss.equals("【")||
-													ss.equals("】")||ss.equals("《")||ss.equals("》")||
-													ss.equals("‘")||ss.equals("’")||ss.equals("“")||
-													ss.equals("”")||ss.equals("\"")||ss.equals("（")||
-													ss.equals("）")||ss.equals("：")){
+											while(ss.equals("")||ss.equals(" ")||ss.equals("，")||ss.equals("。")||
+													ss.equals("！")||ss.equals("、")||ss.equals("【")||ss.equals("●")||
+													ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("—")||
+													ss.equals("‘")||ss.equals("’")||ss.equals("“")||ss.equals("％")||
+													ss.equals("”")||ss.equals("\"")||ss.equals("（")||ss.equals("…")||
+													ss.equals("）")||ss.equals("？")||ss.equals("；")||ss.equals("：")||
+													ss.equals("「")||ss.equals("」")||ss.equals("'")){
 												b++;
 												if(b<sentences.size()-1){
 													ss=sentences.get(b+1);
@@ -237,17 +311,34 @@ public class Preprocessor {
 												suffix = sentences.get(b+1);
 											}
 											else{
-												suffix="";
+												//suffix=null;
+												ordera=false;
+												orderb=false;
+												pos=posa;
+												posa=-1;
+												posb=-1;
+												break;
 											}
 //											suffix = sentences.get(posb+1);
 										}
 										else{
-											suffix = "";
+											//suffix = null;
+											ordera=false;
+											orderb=false;
+											pos=posa;
+											posa=-1;
+											posb=-1;
+											break;
 										}
 										symbol = seeds.get(flag).getSymbol();
 										
-										occurrence = new Occurrence(prefix,seedf, middle, seedl, suffix,symbol,order, num);
-										listOccurrence.add(occurrence);
+										if(prefix==null&&middle==null&&suffix==null){
+											
+										}
+										else{
+											occurrence = new Occurrence(prefix,seedf, middle, seedl, suffix,symbol,order, num);
+											listOccurrence.add(occurrence);
+											}
 										
 										//System.out.println("occurrence.toString()=");
 										//System.out.println(occurrence.toString());
@@ -255,10 +346,12 @@ public class Preprocessor {
 
 										order = false;
 
-									} else {
+									} 
+									else {
 										order = false;
 										//System.out.print("failure|");
 									}
+									
 									ordera = false;
 									orderb = false;
 								}
@@ -291,9 +384,9 @@ public class Preprocessor {
 
 
 
-	public  void findOccurrence(List<Occurrence> occurrence,List<Seed> seed) {
-		List<Pattern> ssstrs = new ArrayList<>();
-		Pattern ssstr = new Pattern();
+	public  List<PatternA> findOccurrence(List<Occurrence> occurrence) {
+		List<PatternA> ssstrs = new ArrayList<>();
+		PatternA ssstr = new PatternA("Test...","Test...","Test...","Test...",false,0);
 
 		String symbol = "";
 		String inPrefix = "";
@@ -323,8 +416,6 @@ public class Preprocessor {
 			inMiddle = str.getMiddle();
 			inSuffix = str.getSuffix();
 			
-			
-			
 			//System.out.println("'''"+ssstrs.size());
 			for(int h =0;h<ssstrs.size();h++){
 				//System.out.println("======go in  Pattern=====");
@@ -344,7 +435,7 @@ public class Preprocessor {
 								
 					if(rrr){
 						//System.out.println("begin2222222222222222");
-						ssstr = new Pattern(str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
+						ssstr = new PatternA(str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
 						ssstrs.add(ssstr);
 										
 						//for(Pattern temp1 :ssstrs){
@@ -364,23 +455,172 @@ public class Preprocessor {
 		}
 //		System.out.println("kakakakakakakakakakakakakakakakakakaka");
 //		System.out.println();
-//		System.out.println("=============charpter3=================");
-//		for(Pattern str:ssstrs){
-//			System.out.println(str);
-//		}
-		System.out.println("=============charpter4=================");
-		for(Pattern str:ssstrs){
-			if(str.getOrder()){
+		System.out.println("=============charpter3=================");
+		for(PatternA str:ssstrs){
 			System.out.println(str);
-			}
 		}
-		System.out.println();
+		System.out.println(ssstrs.size());
+//		System.out.println("=============charpter4=================");
+//		for(PatternA str:ssstrs){
+//			if(str.getOrder())
+//			System.out.println(str);
+//			
+//		}
+//		System.out.println();
+		
+		return ssstrs;
 		
 	}
 	
 	
-	public void matchOccurrence(){
+	/**
+	 * MatchOccurrence(list<patternA>,pathSentence,List<Seeds> )
+	 * 按行读入要检测的大文本语料，并用	tab和。分隔存入spilted中。
+	 * 双重循环对句子遍历模式，用正则匹配找出符合模式的句子。
+	 * 
+	 * */
+	public void matchOccurrence(List<PatternA> ssstrs, String pathSentence, List<Seed> seeds){
 
+		System.out.println("-----------------sentences--------------");
+		File file = new File(pathSentence);
+		BufferedInputStream fis;
+		try {
+			fis = new BufferedInputStream(new FileInputStream(file));
+			//BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "gbk"), 5 * 1024 * 1024);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "UTF-8"), 5 * 1024 * 1024);
+
+			String line = "";
+			String[] spilted = null;
+			
+
+			int i=0;  //标记是第几个句子，打印时看句子比较方便
+			while ((line = reader.readLine()) != null) {
+				//System.out.println(line);
+				i++;
+				spilted = line.split("。|	");
+				//a是要检测的每一个句子
+				for(String a:spilted){
+					
+					//System.out.println("--"+i+"----"+a);
+					//str是要匹配的每一个模式（PatternA是自定义的模式类）
+					//PatternA(symbol，prefix，middle，suffix，order，num)
+					for(PatternA str:ssstrs){
+						//System.out.println(str);
+						
+						String prefix = str.getPrefix();
+						String middle = str.getMiddle();
+						String suffix = str.getSuffix();
+						
+//					    System.out.println("----------");
+//						System.out.println(prefix);
+//						System.out.println(middle);
+//						System.out.println(suffix);
+//						System.out.println("----------");
+						
+						//正则匹配句子模式
+						// 字符串验证规则
+						String regEx = "[\\s\\S]*?["+prefix+"][\\s\\S]*?["+middle+"][\\s\\S]*?["+suffix+"][\\s\\S]*?";
+						//String regEx = "[.*?]["+prefix+"][.*?]["+middle+"][.*?]["+suffix+"][.*?]";
+						//String regEx = "[^[\u0391-\uFFE5]*|[ ]*|[0-9]*|[\\p{P}]*$]*["+prefix+"][^[\u0391-\uFFE5]*|[ ]*|[0-9]*|[\\p{P}]*$]*["+middle+"][^[\u0391-\uFFE5]*|[ ]*|[0-9]*|[\\p{P}]*$]*["+suffix+"][^[\u0391-\uFFE5]*|[ ]*|[0-9]*|[\\p{P}]*$]*";
+						// 编译正则表达式
+						Pattern pattern = Pattern.compile(regEx);
+						Matcher matcher = pattern.matcher(a);
+						// 字符串是否与正则表达式相匹配
+						boolean rs = matcher.matches();
+						//System.out.println(rs);
+						if(rs){
+//							System.out.println("\n************************************");
+//							System.out.println("--"+i+"----"+a);
+//							System.out.println(str);
+							String[] m = a.split(" ");
+							String string="";
+							for(String mm:m){
+								string +=mm;
+							}
+							//System.out.println("[去空格后：]"+string);
+							
+							int posa=string.indexOf(str.getPrefix());//前缀开始的位置
+							int dista = str.getPrefix().length();//前缀的长度
+							int posb = string.indexOf(str.getMiddle(),posa);//中缀开始的位置
+							int distb = str.getMiddle().length();//中缀的长度
+							int posc=string.indexOf(str.getSuffix(),posb);//后缀开始的位置
+							//System.out.println("【"+posa+"|"+posb+"|"+posc+"|"+dista+"|"+distb+"】");
+							
+							//为什么会有这个判断呢？是因为正则出问题了，以后再说吧正则太难了。
+							if(posa==-1||posb==-1||posc==-1){
+								break;
+							}
+							
+							//！！！如果要测试打开这一段输出！！！
+//							System.out.println("+++++++++++++++++++++++++++++++++++");
+//							System.out.println("--"+i+"----"+a);
+//
+//							System.out.println(str);
+//							System.out.println("[去空格后：]"+string);
+//							System.out.println(str.getPrefix());
+//							System.out.println(str.getMiddle());
+//							System.out.println(str.getSuffix());
+//							System.out.println("【"+posa+"|"+posb+"|"+posc+"|"+dista+"|"+distb+"】");
+	
+							
+							String fseedf="",fseedl="";
+							for(int f=posa+dista;f<posb;f++){
+								fseedf+=string.charAt(f);
+							}
+							for(int f=posb+distb;f<posc;f++){
+								fseedl+=string.charAt(f);
+							}
+//							System.out.println("["+str.getSymbol()+","+fseedf+","+fseedl+"]");
+
+							
+							boolean flag=false;
+							//System.out.println(seeds.size());
+							for(int p=0;p<seeds.size();p++){
+								//System.out.println(seeds.get(p));
+								if(seeds.get(p).getSeedfirst().equals(fseedf)&&seeds.get(p).getSeedlast().equals(fseedl)){
+									//System.out.println("error");
+									break;
+								}
+								else{
+									if(p+1==seeds.size()){
+										flag=true;
+									}
+									//System.out.println("ok");
+									if(flag){
+										seeds.add(new Seed(str.getSymbol(),fseedf,fseedl));
+										flag=false;
+										break;
+									}
+								}
+							}
+
+//							System.out.println();
+//							System.out.println("+++++++++++++++++++++++++++++++++++");
+//							System.out.println("************************************\n");							
+							
+						}
+						 
+					}
+				}
+			}
+			
+		}catch (IOException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		System.out.println("-----------------sentences--------------");
+
+		System.out.println("-----------------newseeds------------------");
+		
+		for(Seed str:seeds){
+			System.out.println(str);
+		}
+		System.out.println(seeds.size());
+		System.out.println("-----------------newseeds------------------");
+		
+
+		
+		
 	}
 
 }

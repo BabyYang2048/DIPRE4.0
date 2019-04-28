@@ -1,6 +1,6 @@
 package domain;
 
-public class Pattern {
+public class PatternA {
 	
 	String symbol;
 	String prefix;
@@ -8,9 +8,9 @@ public class Pattern {
 	String suffix;
 	boolean order;
 	int num;
-	
-	public Pattern(){}
-	public Pattern(String symbol,String prefix,String middle,String suffix,boolean order,int num){
+	 
+	public PatternA(){}
+	public PatternA(String symbol,String prefix,String middle,String suffix,boolean order,int num){
 		this.symbol = symbol;
 		this.prefix = prefix;
 		this.middle = middle;
@@ -57,6 +57,7 @@ public class Pattern {
 	
 	public String toString(){
 		return "("+"["+symbol+"],["+prefix+"],["+middle+"],["+suffix+"],"+order+","+num+")";
+		
 	}
 	
 

@@ -5,7 +5,7 @@ import java.util.*;
 
 import domain.AOccurrence;
 import domain.Occurrence;
-import domain.Pattern;
+import domain.PatternA;
 import domain.Seed;
 import domain.Structure;
 
@@ -249,8 +249,8 @@ public class APreprocessor {
 		List<Structure> AAA = new ArrayList<>();
 		Structure aaa = new Structure();
 		
-		List<Pattern> ssstrs = new ArrayList<>();
-		Pattern ssstr = new Pattern();
+		List<PatternA> ssstrs = new ArrayList<>();
+		PatternA ssstr = new PatternA();
 
 		String inPrefix="";
 		String inMiddle="";
@@ -449,7 +449,7 @@ public class APreprocessor {
 								if(rrr){
 									//System.out.println("begin2222222222222222");
 									//if()
-									ssstr = new Pattern(str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
+									ssstr = new PatternA(str.getSymbol(),inPrefix,inMiddle,inSuffix,inOrder,inNum);
 									ssstrs.add(ssstr);
 									
 									//for(Pattern temp1 :ssstrs){
