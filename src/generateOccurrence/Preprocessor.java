@@ -280,7 +280,7 @@ public class Preprocessor {
 											else{
 												for (int a = posa + 1; a < posb; a++) {
 													//middle.add(sentences.get(a));
-													middle +=sentences.get(a);
+													middle +=sentences.get(a)+" ";
 													//System.out.println(sentences.get(a));
 												}
 											}
@@ -386,6 +386,7 @@ public class Preprocessor {
 
 	public  List<PatternA> findOccurrence(List<Occurrence> occurrence) {
 		List<PatternA> ssstrs = new ArrayList<>();
+		//PatternA ssstr = new PatternA();
 		PatternA ssstr = new PatternA("Test...","Test...","Test...","Test...",false,0);
 
 		String symbol = "";
@@ -477,7 +478,6 @@ public class Preprocessor {
 	 * MatchOccurrence(list<patternA>,pathSentence,List<Seeds> )
 	 * 按行读入要检测的大文本语料，并用	tab和。分隔存入spilted中。
 	 * 双重循环对句子遍历模式，用正则匹配找出符合模式的句子。
-	 * 
 	 * */
 	public void matchOccurrence(List<PatternA> ssstrs, String pathSentence, List<Seed> seeds){
 
@@ -500,11 +500,12 @@ public class Preprocessor {
 				spilted = line.split("。|	");
 				//a是要检测的每一个句子
 				for(String a:spilted){
-					
+					//System.out.println("first loop   spilted.size="+spilted.length);
 					//System.out.println("--"+i+"----"+a);
 					//str是要匹配的每一个模式（PatternA是自定义的模式类）
 					//PatternA(symbol，prefix，middle，suffix，order，num)
 					for(PatternA str:ssstrs){
+						//System.out.println("second loop   i="+i+"  ssstrs.size()="+ssstrs.size());
 						//System.out.println(str);
 						
 						String prefix = str.getPrefix();
@@ -517,9 +518,13 @@ public class Preprocessor {
 //						System.out.println(suffix);
 //						System.out.println("----------");
 						
+						
 						//正则匹配句子模式
 						// 字符串验证规则
-						String regEx = "[\\s\\S]*?["+prefix+"][\\s\\S]*?["+middle+"][\\s\\S]*?["+suffix+"][\\s\\S]*?";
+						//String regEx = ".*?"+prefix+".*?（ 拉丁 名 ： Carpodacus mexicanus ） ， 属于.*?"+suffix+".*";
+						String regEx = ".*?"+prefix+".*?"+middle+".*?"+suffix+".*?";
+						//String regEx = "[\\s\\S]*"+prefix+"[\\s\\S+\\s]{1}"+middle+"[\\s\\S+\\s]{1}"+suffix+"[\\s\\S]*";
+						//String regEx = "[\\s\\S]*?"+prefix+"[\\s\\S]*?"+middle+"[\\s\\S]*?"+suffix+"[\\s\\S]*?";
 						//String regEx = "[.*?]["+prefix+"][.*?]["+middle+"][.*?]["+suffix+"][.*?]";
 						//String regEx = "[^[\u0391-\uFFE5]*|[ ]*|[0-9]*|[\\p{P}]*$]*["+prefix+"][^[\u0391-\uFFE5]*|[ ]*|[0-9]*|[\\p{P}]*$]*["+middle+"][^[\u0391-\uFFE5]*|[ ]*|[0-9]*|[\\p{P}]*$]*["+suffix+"][^[\u0391-\uFFE5]*|[ ]*|[0-9]*|[\\p{P}]*$]*";
 						// 编译正则表达式
@@ -527,7 +532,11 @@ public class Preprocessor {
 						Matcher matcher = pattern.matcher(a);
 						// 字符串是否与正则表达式相匹配
 						boolean rs = matcher.matches();
-						//System.out.println(rs);
+						
+						
+//						System.out.println(regEx);
+//						System.out.println("line="+line+"\n=============rs="+rs);
+						
 						if(rs){
 //							System.out.println("\n************************************");
 //							System.out.println("--"+i+"----"+a);
@@ -539,38 +548,61 @@ public class Preprocessor {
 							}
 							//System.out.println("[去空格后：]"+string);
 							
+							String[] mmid = str.getMiddle().split(" ");
+							String string1 = "";
+							for(String mm:mmid){
+								string1 +=mm;
+							}
+							
 							int posa=string.indexOf(str.getPrefix());//前缀开始的位置
 							int dista = str.getPrefix().length();//前缀的长度
-							int posb = string.indexOf(str.getMiddle(),posa);//中缀开始的位置
-							int distb = str.getMiddle().length();//中缀的长度
+							int posb = string.indexOf(string1,posa);//中缀开始的位置
+							int distb = string1.length();//中缀的长度
 							int posc=string.indexOf(str.getSuffix(),posb);//后缀开始的位置
 							//System.out.println("【"+posa+"|"+posb+"|"+posc+"|"+dista+"|"+distb+"】");
 							
+							
+							//！！！如果要测试打开这一段输出！！！
+							System.out.println("+++++++++++++++++++++++++++++++++++");
+							System.out.println("--"+i+"----"+a);
+
+							System.out.println(str);
+							System.out.println("[去空格后：]"+string);
+							System.out.println(str.getPrefix());
+							System.out.println(str.getMiddle());
+							System.out.println(str.getSuffix());
+							System.out.println("【"+posa+"|"+posb+"|"+posc+"|"+dista+"|"+distb+"】");
+	
 							//为什么会有这个判断呢？是因为正则出问题了，以后再说吧正则太难了。
 							if(posa==-1||posb==-1||posc==-1){
 								break;
 							}
 							
-							//！！！如果要测试打开这一段输出！！！
-//							System.out.println("+++++++++++++++++++++++++++++++++++");
-//							System.out.println("--"+i+"----"+a);
-//
-//							System.out.println(str);
-//							System.out.println("[去空格后：]"+string);
-//							System.out.println(str.getPrefix());
-//							System.out.println(str.getMiddle());
-//							System.out.println(str.getSuffix());
-//							System.out.println("【"+posa+"|"+posb+"|"+posc+"|"+dista+"|"+distb+"】");
-	
+							
 							
 							String fseedf="",fseedl="";
 							for(int f=posa+dista;f<posb;f++){
+								char ss=string.charAt(f);
+								if(ss!=' '&&ss!='，'&&ss!='。'&&ss!='、'&&ss!='！'
+										&&ss!='【'&&ss!='】'&&ss!='●'&&ss!='《'&&ss!='》'&&ss!='—'&&ss!='‘'
+										&&ss!='’'&&ss!='）'&&ss!='”'&&ss!='“'&&ss!='％'&&ss!='\"'&&ss!='（'
+										&&ss!='…'&&ss!='？'&&ss!='；'&&ss!='：'&&ss!='「'&&ss!='」'&&ss!='\''){
+
 								fseedf+=string.charAt(f);
+								}
 							}
 							for(int f=posb+distb;f<posc;f++){
-								fseedl+=string.charAt(f);
+								char ss=string.charAt(f);
+								
+								if(ss!=' '&&ss!='，'&&ss!='。'&&ss!='、'&&ss!='！'
+									&&ss!='【'&&ss!='】'&&ss!='●'&&ss!='《'&&ss!='》'&&ss!='—'&&ss!='‘'
+									&&ss!='’'&&ss!='）'&&ss!='”'&&ss!='“'&&ss!='％'&&ss!='\"'&&ss!='（'
+									&&ss!='…'&&ss!='？'&&ss!='；'&&ss!='：'&&ss!='「'&&ss!='」'&&ss!='\''){
+
+									fseedl+=string.charAt(f);
+								}
 							}
-//							System.out.println("["+str.getSymbol()+","+fseedf+","+fseedl+"]");
+							System.out.println("["+str.getSymbol()+","+fseedf+","+fseedl+"]");
 
 							
 							boolean flag=false;

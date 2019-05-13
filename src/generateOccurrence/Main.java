@@ -24,7 +24,8 @@ public class Main {
 		//String pathSentence = "D:/PPPPPPPractice/ccc.txt";  //utf-8
 		//String pathSeed = "D:/PPPPPPPractice/m.txt"; //gbk
 		//String pathSeed = "D:/PPPPPPPractice/big_pair.txt";//utf-8
-		String pathSentence = "D:/PPPPPPPractice/ckxx_jieba_seg.txt";//utf-8
+		String pathSentence = "D:/PPPPPPPractice/newSentences.txt";
+		//String pathSentence = "D:/PPPPPPPractice/ckxx_jieba_seg.txt";//utf-8
 		System.out.println("-----------------start------------------");
 		List<Seed> seeds = preprocessor.spiltedSeeds(pathSeed);
 		List<Occurrence> occurrence = preprocessor.spiltedSentences(pathSentence,seeds);
