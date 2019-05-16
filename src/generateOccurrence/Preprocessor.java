@@ -609,7 +609,7 @@ public class Preprocessor {
 							
 
 							String fseedf="",fseedl="";
-							for(int f=posb-2;f>=posa+dista+1;f--){
+							for(int f=posa+dista+1;f<posb-1;f++){
 								fseedf+=a.charAt(f);
 								if(a.charAt(f)==32){
 									System.out.println("seedf这里有空格！！"+"f=="+f);
@@ -617,7 +617,7 @@ public class Preprocessor {
 									break;
 								}
 							}
-							System.out.println("buffer(fseedf)==="+buffer(fseedf));
+							
 						
 							for(int f=posc-2;f>=posb+distb;f--){
 								fseedl+=a.charAt(f);
@@ -629,7 +629,7 @@ public class Preprocessor {
 
 							}
 							System.out.println("buffer(fseedl)==="+buffer(fseedl));
-							fseedf = buffer(fseedf).toString().trim();
+							fseedf = fseedf.trim();
 							fseedl = buffer(fseedl).toString().trim(); 
 							boolean aaaa = isLetterDigitOrChinese(fseedf.trim());
 							boolean bbbb = isLetterDigitOrChinese(fseedl.trim());
