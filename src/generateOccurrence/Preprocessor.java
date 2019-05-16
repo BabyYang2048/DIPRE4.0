@@ -212,23 +212,23 @@ public class Preprocessor {
 											int a=posa;
 											String ss=sentences.get(posa-1);
 											//System.out.println(ss+" ");
-											while(ss.equals("")||ss.equals(" ")||ss.equals("，")||ss.equals("。")||
-													ss.equals("！")||ss.equals("、")||ss.equals("【")||ss.equals("●")||
-													ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("—")||
-													ss.equals("‘")||ss.equals("’")||ss.equals("“")||ss.equals("％")||
-													ss.equals("”")||ss.equals("\"")||ss.equals("（")||ss.equals("…")||
-													ss.equals("）")||ss.equals("？")||ss.equals("；")||ss.equals("：")||
-													ss.equals("「")||ss.equals("」")){
-												a--;
-												//System.out.println(ss+"	"+a);
-												//System.out.println();
-												if(a>0){
-													ss=sentences.get(a-1);
-												}
-												else{
-													break;
-												}
-											}
+//											while(ss.equals("")||ss.equals(" ")||ss.equals("，")||ss.equals("。")||
+//													ss.equals("！")||ss.equals("、")||ss.equals("【")||ss.equals("●")||
+//													ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("—")||
+//													ss.equals("‘")||ss.equals("’")||ss.equals("“")||ss.equals("％")||
+//													ss.equals("”")||ss.equals("\"")||ss.equals("（")||ss.equals("…")||
+//													ss.equals("）")||ss.equals("？")||ss.equals("；")||ss.equals("：")||
+//													ss.equals("「")||ss.equals("」")){
+//												a--;
+//												//System.out.println(ss+"	"+a);
+//												//System.out.println();
+//												if(a>0){
+//													ss=sentences.get(a-1);
+//												}
+//												else{
+//													break;
+//												}
+//											}
 											//System.out.println();
 											//System.out.println(ss+"	"+a);
 											if(a>0){
@@ -258,32 +258,32 @@ public class Preprocessor {
 											break;
 										}
 										else{
-											if(posa+2==posb){
-												String ss=sentences.get(posa+1);
-												if(ss.equals("")||ss.equals(" ")||ss.equals("，")||ss.equals("。")||
-												ss.equals("！")||ss.equals("、")||ss.equals("【")||ss.equals("●")||
-												ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("—")||
-												ss.equals("‘")||ss.equals("’")||ss.equals("“")||ss.equals("％")||
-												ss.equals("”")||ss.equals("\"")||ss.equals("（")||ss.equals("…")||
-												ss.equals("）")||ss.equals("？")||ss.equals("；")||ss.equals("：")||
-												ss.equals("「")||ss.equals("」")){
-													break;
-												}
-												else{
-													for (int a = posa + 1; a < posb; a++) {
-														//middle.add(sentences.get(a));
-														middle +=sentences.get(a);
-														//System.out.println(sentences.get(a));
-													}
-												}
-											}
-											else{
+//											if(posa+2==posb){
+//												String ss=sentences.get(posa+1);
+//												if(ss.equals("")||ss.equals(" ")||ss.equals("，")||ss.equals("。")||
+//												ss.equals("！")||ss.equals("、")||ss.equals("【")||ss.equals("●")||
+//												ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("—")||
+//												ss.equals("‘")||ss.equals("’")||ss.equals("“")||ss.equals("％")||
+//												ss.equals("”")||ss.equals("\"")||ss.equals("（")||ss.equals("…")||
+//												ss.equals("）")||ss.equals("？")||ss.equals("；")||ss.equals("：")||
+//												ss.equals("「")||ss.equals("」")){
+//													break;
+//												}
+//												else{
+//													for (int a = posa + 1; a < posb; a++) {
+//														//middle.add(sentences.get(a));
+//														middle +=sentences.get(a);
+//														//System.out.println(sentences.get(a));
+//													}
+//												}
+//											}
+//											else{
 												for (int a = posa + 1; a < posb; a++) {
 													//middle.add(sentences.get(a));
 													middle +=sentences.get(a)+" ";
 													//System.out.println(sentences.get(a));
 												}
-											}
+//											}
 										}
 										//System.out.println(middle);
 										seedl = sentences.get(posb);
@@ -291,22 +291,22 @@ public class Preprocessor {
 											int b=posb;
 											String ss=sentences.get(posb+1);
 											//System.out.println(ss);
-											while(ss.equals("")||ss.equals(" ")||ss.equals("，")||ss.equals("。")||
-													ss.equals("！")||ss.equals("、")||ss.equals("【")||ss.equals("●")||
-													ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("—")||
-													ss.equals("‘")||ss.equals("’")||ss.equals("“")||ss.equals("％")||
-													ss.equals("”")||ss.equals("\"")||ss.equals("（")||ss.equals("…")||
-													ss.equals("）")||ss.equals("？")||ss.equals("；")||ss.equals("：")||
-													ss.equals("「")||ss.equals("」")||ss.equals("'")){
-												b++;
-												if(b<sentences.size()-1){
-													ss=sentences.get(b+1);
-												}
-												else{
-													break;
-												}
-												
-											}
+//											while(ss.equals("")||ss.equals(" ")||ss.equals("，")||ss.equals("。")||
+//													ss.equals("！")||ss.equals("、")||ss.equals("【")||ss.equals("●")||
+//													ss.equals("】")||ss.equals("《")||ss.equals("》")||ss.equals("—")||
+//													ss.equals("‘")||ss.equals("’")||ss.equals("“")||ss.equals("％")||
+//													ss.equals("”")||ss.equals("\"")||ss.equals("（")||ss.equals("…")||
+//													ss.equals("）")||ss.equals("？")||ss.equals("；")||ss.equals("：")||
+//													ss.equals("「")||ss.equals("」")||ss.equals("'")){
+//												b++;
+//												if(b<sentences.size()-1){
+//													ss=sentences.get(b+1);
+//												}
+//												else{
+//													break;
+//												}
+//												
+//											}
 											if(b<sentences.size()-1){
 												suffix = sentences.get(b+1);
 											}
@@ -473,7 +473,16 @@ public class Preprocessor {
 		
 	}
 	
+	public static StringBuffer buffer(String s){
+        StringBuffer sb=new StringBuffer();
+        sb.append(s);       
+        return sb.reverse();
+    }
 	
+	public static boolean isLetterDigitOrChinese(String str) {
+		  String regex = "^[a-z0-9A-Z\u4e00-\u9fa5]+[/]*[a-z0-9A-Z\u4e00-\u9fa5]*$";//其他需要，直接修改正则表达式就好
+		  return str.matches(regex);
+		 }
 	/**
 	 * MatchOccurrence(list<patternA>,pathSentence,List<Seeds> )
 	 * 按行读入要检测的大文本语料，并用	tab和。分隔存入spilted中。
@@ -499,7 +508,7 @@ public class Preprocessor {
 				i++;
 				spilted = line.split("。|	");
 				//a是要检测的每一个句子
-				for(String a:spilted){
+				sign:for(String a:spilted){
 					//System.out.println("first loop   spilted.size="+spilted.length);
 					//System.out.println("--"+i+"----"+a);
 					//str是要匹配的每一个模式（PatternA是自定义的模式类）
@@ -541,24 +550,24 @@ public class Preprocessor {
 //							System.out.println("\n************************************");
 //							System.out.println("--"+i+"----"+a);
 //							System.out.println(str);
-							String[] m = a.split(" ");
-							String string="";
-							for(String mm:m){
-								string +=mm;
-							}
+//							String[] m = a.split(" ");
+//							String string="";
+//							for(String mm:m){
+//								string +=mm;
+//							}
 							//System.out.println("[去空格后：]"+string);
 							
-							String[] mmid = str.getMiddle().split(" ");
-							String string1 = "";
-							for(String mm:mmid){
-								string1 +=mm;
-							}
+//							String[] mmid = str.getMiddle().split(" ");
+//							String string1 = "";
+//							for(String mm:mmid){
+//								string1 +=mm;
+//							}
 							
-							int posa=string.indexOf(str.getPrefix());//前缀开始的位置
+							int posa=a.indexOf(str.getPrefix());//前缀开始的位置
 							int dista = str.getPrefix().length();//前缀的长度
-							int posb = string.indexOf(string1,posa);//中缀开始的位置
-							int distb = string1.length();//中缀的长度
-							int posc=string.indexOf(str.getSuffix(),posb);//后缀开始的位置
+							int posb = a.indexOf(str.getMiddle(),posa+dista);//中缀开始的位置
+							int distb = str.getMiddle().length();//中缀的长度
+							int posc=a.indexOf(str.getSuffix(),posb+distb);//后缀开始的位置
 							//System.out.println("【"+posa+"|"+posb+"|"+posc+"|"+dista+"|"+distb+"】");
 							
 							
@@ -567,7 +576,7 @@ public class Preprocessor {
 							System.out.println("--"+i+"----"+a);
 
 							System.out.println(str);
-							System.out.println("[去空格后：]"+string);
+//							System.out.println("[去空格后：]"+string);
 							System.out.println(str.getPrefix());
 							System.out.println(str.getMiddle());
 							System.out.println(str.getSuffix());
@@ -577,51 +586,73 @@ public class Preprocessor {
 							if(posa==-1||posb==-1||posc==-1){
 								break;
 							}
+
+//							
+//							String fseedf="",fseedl="";
+//							for(int f=posa+dista+1;f<posb-1;f++){
+//								fseedf+=a.charAt(f);
+//								if(a.charAt(f)==32){
+//									System.out.println("seedf这里有空格！！"+"f=="+f);
+//									//break sign;
+//									//break;
+//								}
+//							}
+//							for(int f=posb+distb;f<posc-1;f++){
+//								fseedl+=a.charAt(f);
+//								if(a.charAt(f)==32){
+//									System.out.println("seedl这里有空格！！"+"f=="+f);
+//									//break sign;
+//									//break;
+//								}
+//
+//							}
 							
-							
-							
+
 							String fseedf="",fseedl="";
-							for(int f=posa+dista;f<posb;f++){
-								char ss=string.charAt(f);
-								if(ss!=' '&&ss!='，'&&ss!='。'&&ss!='、'&&ss!='！'
-										&&ss!='【'&&ss!='】'&&ss!='●'&&ss!='《'&&ss!='》'&&ss!='—'&&ss!='‘'
-										&&ss!='’'&&ss!='）'&&ss!='”'&&ss!='“'&&ss!='％'&&ss!='\"'&&ss!='（'
-										&&ss!='…'&&ss!='？'&&ss!='；'&&ss!='：'&&ss!='「'&&ss!='」'&&ss!='\''){
-
-								fseedf+=string.charAt(f);
-								}
-							}
-							for(int f=posb+distb;f<posc;f++){
-								char ss=string.charAt(f);
-								
-								if(ss!=' '&&ss!='，'&&ss!='。'&&ss!='、'&&ss!='！'
-									&&ss!='【'&&ss!='】'&&ss!='●'&&ss!='《'&&ss!='》'&&ss!='—'&&ss!='‘'
-									&&ss!='’'&&ss!='）'&&ss!='”'&&ss!='“'&&ss!='％'&&ss!='\"'&&ss!='（'
-									&&ss!='…'&&ss!='？'&&ss!='；'&&ss!='：'&&ss!='「'&&ss!='」'&&ss!='\''){
-
-									fseedl+=string.charAt(f);
-								}
-							}
-							System.out.println("["+str.getSymbol()+","+fseedf+","+fseedl+"]");
-
-							
-							boolean flag=false;
-							//System.out.println(seeds.size());
-							for(int p=0;p<seeds.size();p++){
-								//System.out.println(seeds.get(p));
-								if(seeds.get(p).getSeedfirst().equals(fseedf)&&seeds.get(p).getSeedlast().equals(fseedl)){
-									//System.out.println("error");
+							for(int f=posb-2;f>=posa+dista+1;f--){
+								fseedf+=a.charAt(f);
+								if(a.charAt(f)==32){
+									System.out.println("seedf这里有空格！！"+"f=="+f);
+									//break sign;
 									break;
 								}
-								else{
-									if(p+1==seeds.size()){
-										flag=true;
-									}
-									//System.out.println("ok");
-									if(flag){
-										seeds.add(new Seed(str.getSymbol(),fseedf,fseedl));
-										flag=false;
+							}
+							System.out.println("buffer(fseedf)==="+buffer(fseedf));
+						
+							for(int f=posc-2;f>=posb+distb;f--){
+								fseedl+=a.charAt(f);
+								if(a.charAt(f)==32){
+									System.out.println("seedl这里有空格！！"+"f=="+f);
+									//break sign;
+									break;
+								}
+
+							}
+							System.out.println("buffer(fseedl)==="+buffer(fseedl));
+							fseedf = buffer(fseedf).toString().trim();
+							fseedl = buffer(fseedl).toString().trim(); 
+							boolean aaaa = isLetterDigitOrChinese(fseedf.trim());
+							boolean bbbb = isLetterDigitOrChinese(fseedl.trim());
+							System.out.println(aaaa+" "+bbbb);
+							boolean flag=false;
+							//System.out.println(seeds.size());
+							if(fseedf!=" "&&fseedl!=" "&&aaaa&&bbbb){
+								for(int p=0;p<seeds.size();p++){
+									//System.out.println(seeds.get(p));
+									if(seeds.get(p).getSeedfirst().equals(fseedf)&&seeds.get(p).getSeedlast().equals(fseedl)){
+										//System.out.println("error");
 										break;
+									}
+									else{
+										if(p+1==seeds.size()){
+											flag=true;
+										}
+										//System.out.println("ok");
+										if(flag){
+											seeds.add(new Seed(str.getSymbol(),fseedf,fseedl));
+											flag=false;
+											break;
+										}
 									}
 								}
 							}

@@ -24,7 +24,7 @@ public class Main {
 		//String pathSentence = "D:/PPPPPPPractice/ccc.txt";  //utf-8
 		//String pathSeed = "D:/PPPPPPPractice/m.txt"; //gbk
 		//String pathSeed = "D:/PPPPPPPractice/big_pair.txt";//utf-8
-		String pathSentence = "D:/PPPPPPPractice/newSentences.txt";
+		String pathSentence = "D:/PPPPPPPractice/newSentences.txt";//utf-8
 		//String pathSentence = "D:/PPPPPPPractice/ckxx_jieba_seg.txt";//utf-8
 		System.out.println("-----------------start------------------");
 		List<Seed> seeds = preprocessor.spiltedSeeds(pathSeed);
@@ -35,8 +35,11 @@ public class Main {
 		//List<Seed> aseeds = apreprocessor.spiltedSeeds(pathSeed);
 		//List<AOccurrence> aoccurrence = apreprocessor.spiltedSentences(pathSentence, aseeds);
 		
+		String pathMatchSentence = "D:/PPPPPPPractice/newSentences.txt";
+		//String pathMatchSentence = "D:/PPPPPPPractice/ckxx_jieba_seg.txt";
+		
 		List<PatternA> ssstrs = preprocessor.findOccurrence(occurrence);
-		preprocessor.matchOccurrence(ssstrs,pathSentence,seeds);
+		preprocessor.matchOccurrence(ssstrs,pathMatchSentence ,seeds);
 		
 		System.out.println("------------------end-------------------");
 	
